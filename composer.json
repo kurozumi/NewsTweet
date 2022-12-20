@@ -1,0 +1,13 @@
+{
+    "name": "ec-cube/newstweet",
+    "version": "4.2.0",
+    "description": "新着情報ツイート",
+    "type": "eccube-plugin",
+    "require": {
+        "ec-cube/plugin-installer": "~0.0.7 || ^2.0",
+        "abraham/twitteroauth": "*"
+    },
+    "extra": {
+        "code": "NewsTweet"
+    }
+}
