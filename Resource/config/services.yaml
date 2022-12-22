@@ -1,4 +1,8 @@
 parameters:
+  env(TWITTER_CONSUMER_KEY): ''
+  env(TWITTER_CONSUMER_SECRET): ''
+  env(TWITTER_ACCESS_TOKEN): ''
+  env(TWITTER_ACCESS_TOKEN_SECRET): ''
   twitter.consumer_key: '%env(TWITTER_CONSUMER_KEY)%'
   twitter.consumer_secret: '%env(TWITTER_CONSUMER_SECRET)%'
   twitter.access_token: '%env(TWITTER_ACCESS_TOKEN)%'

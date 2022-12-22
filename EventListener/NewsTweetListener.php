@@ -20,7 +20,7 @@ use Eccube\Event\EccubeEvents;
 use Eccube\Event\EventArgs;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class NewTweetListener implements EventSubscriberInterface
+class NewsTweetListener implements EventSubscriberInterface
 {
     /**
      * @var EccubeConfig
