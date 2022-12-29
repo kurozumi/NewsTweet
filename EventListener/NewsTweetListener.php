@@ -44,6 +44,10 @@ class NewsTweetListener implements EventSubscriberInterface
         /** @var News $news */
         $news = $event->getArgument('News');
 
+        if (false === $news->isTweet()) {
+            return;
+        }
+
         if ($news->isVisible() && $news->getPublishDate() < new \DateTime()) {
             $connection = new TwitterOAuth(
                 $this->eccubeConfig->get('twitter.consumer_key'),
