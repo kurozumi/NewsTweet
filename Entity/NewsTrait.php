@@ -29,6 +29,13 @@ trait NewsTrait
     private $tweet;
 
     /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(type="datetimetz", nullable=true)
+     */
+    private $tweeted_date;
+
+    /**
      * @return bool
      */
     public function isTweet(): bool
@@ -43,6 +50,25 @@ trait NewsTrait
     public function setTweet(bool $tweet): self
     {
         $this->tweet = $tweet;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getTweetedDate(): ?\DateTime
+    {
+        return $this->tweeted_date;
+    }
+
+    /**
+     * @param \DateTime|null $dateTime
+     * @return $this
+     */
+    public function setTweetedDate(?\DateTime $dateTime)
+    {
+        $this->tweeted_date = $dateTime;
 
         return $this;
     }

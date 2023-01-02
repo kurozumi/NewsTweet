@@ -14,6 +14,7 @@
 namespace Plugin\NewsTweet\EventListener;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use Doctrine\ORM\EntityManagerInterface;
 use Eccube\Common\EccubeConfig;
 use Eccube\Entity\News;
 use Eccube\Event\EccubeEvents;
@@ -27,9 +28,15 @@ class NewsTweetListener implements EventSubscriberInterface
      */
     private $eccubeConfig;
 
-    public function __construct(EccubeConfig $eccubeConfig)
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    public function __construct(EccubeConfig $eccubeConfig, EntityManagerInterface $entityManager)
     {
         $this->eccubeConfig = $eccubeConfig;
+        $this->entityManager = $entityManager;
     }
 
     public static function getSubscribedEvents(): array
@@ -55,7 +62,12 @@ class NewsTweetListener implements EventSubscriberInterface
                 $this->eccubeConfig->get('twitter.access_token'),
                 $this->eccubeConfig->get('twitter.access_token_secret')
             );
-            $connection->post("statuses/update", ["status" => $news->getTitle() . " " . $news->getUrl()]);
+            $connection->post('statuses/update', ['status' => $news->getTitle() . ' ' . $news->getUrl()]);
+            if (200 === $connection->getLastHttpCode()) {
+                $news->setTweetedDate(new \DateTime());
+                $this->entityManager->persist($news);
+                $this->entityManager->flush();
+            }
         }
     }
 }
