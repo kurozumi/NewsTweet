@@ -13,6 +13,7 @@
 
 namespace Plugin\NewsTweet\Form\Extension\Admin;
 
+use Eccube\Entity\News;
 use Eccube\Form\Type\Admin\NewsType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -22,10 +23,13 @@ class NewsTypeExtension extends AbstractTypeExtension
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var News $news */
+        $news = $options['data'];
+        $tweetedDate = $news->getTweetedDate() ? ' '.$news->getTweetedDate()->format('Y/m/d H:i:s') : '';
         $builder
             ->add('tweet', CheckboxType::class, [
                 'required' => false,
-                'label_format' => 'ツイートする',
+                'label_format' => 'ツイートする' . $tweetedDate,
                 'eccube_form_options' => [
                     'auto_render' => true,
                 ],
