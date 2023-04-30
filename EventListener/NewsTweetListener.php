@@ -55,6 +55,7 @@ class NewsTweetListener implements EventSubscriberInterface
                 $this->eccubeConfig->get('twitter.access_token'),
                 $this->eccubeConfig->get('twitter.access_token_secret')
             );
+            $connection->setApiVersion('2');
             $connection->post("statuses/update", ["status" => $news->getTitle() . " " . $news->getUrl()]);
         }
     }
