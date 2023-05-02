@@ -18,6 +18,7 @@ use Eccube\Common\EccubeConfig;
 use Eccube\Entity\News;
 use Eccube\Event\EccubeEvents;
 use Eccube\Event\EventArgs;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class NewsTweetListener implements EventSubscriberInterface
@@ -27,9 +28,15 @@ class NewsTweetListener implements EventSubscriberInterface
      */
     private $eccubeConfig;
 
-    public function __construct(EccubeConfig $eccubeConfig)
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    public function __construct(EccubeConfig $eccubeConfig, ContainerInterface $container)
     {
         $this->eccubeConfig = $eccubeConfig;
+        $this->container = $container;
     }
 
     public static function getSubscribedEvents(): array
@@ -55,8 +62,18 @@ class NewsTweetListener implements EventSubscriberInterface
                 $this->eccubeConfig->get('twitter.access_token'),
                 $this->eccubeConfig->get('twitter.access_token_secret')
             );
-            $connection->setApiVersion('2');
             $connection->post("statuses/update", ["status" => $news->getTitle() . " " . $news->getUrl()]);
+            if (200 !== $connection->getLastHttpCode()) {
+                $this->container->get('session')->getFlashBag()->add(
+                    'eccube.admin.error',
+                    'Twitter投稿に失敗しました。',
+                );
+            } else {
+                $this->container->get('session')->getFlashBag()->add(
+                    'eccube.admin.success',
+                    'Twitterに投稿しました。',
+                );
+            }
         }
     }
 }
