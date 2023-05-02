@@ -63,15 +63,15 @@ class NewsTweetListener implements EventSubscriberInterface
                 $this->eccubeConfig->get('twitter.access_token_secret')
             );
             $connection->post("statuses/update", ["status" => $news->getTitle() . " " . $news->getUrl()]);
-            if (200 !== $connection->getLastHttpCode()) {
-                $this->container->get('session')->getFlashBag()->add(
-                    'eccube.admin.error',
-                    'Twitter投稿に失敗しました。',
-                );
-            } else {
+            if (200 === $connection->getLastHttpCode()) {
                 $this->container->get('session')->getFlashBag()->add(
                     'eccube.admin.success',
                     'Twitterに投稿しました。',
+                );
+            } else {
+                $this->container->get('session')->getFlashBag()->add(
+                    'eccube.admin.error',
+                    'Twitter投稿に失敗しました。',
                 );
             }
         }
